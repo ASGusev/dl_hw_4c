@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 
 
@@ -21,7 +22,6 @@ class BlockA(nn.Module):
     def forward(self, x):
         out = self.res_func(x)
         for path in self.paths:
-            print(out.shape, path(x).shape)
             out = out + path(x)
         out = self.relu(out)
         return out
@@ -71,6 +71,13 @@ class ResNext(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.fully_connected(x)
         return x
+
+    def save(self, path):
+        torch.save(self, path)
+
+
+def load(path):
+    return torch.load(path)
 
 
 CONFIGURATIONS = {
